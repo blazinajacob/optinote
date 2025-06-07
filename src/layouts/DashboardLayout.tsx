@@ -1,4 +1,4 @@
-import { useState, useEffect, ReactNode } from 'react';
+import { useState, useEffect, useRef, ReactNode } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -37,6 +37,12 @@ const DashboardLayout = () => {
   const [searchResults, setSearchResults] = useState<GlobalSearchResult[]>([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
   
+  // Refs for click-outside detection
+  const profileMenuRef = useRef<HTMLDivElement>(null);
+  const profileButtonRef = useRef<HTMLButtonElement>(null);
+  const searchResultsRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLDivElement>(null);
+  
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Patients', href: '/patients', icon: Users2 },
@@ -71,6 +77,24 @@ const DashboardLayout = () => {
     setSearchQuery('');
     setShowSearchResults(false);
   }, [location.pathname]);
+  
+  // Handle click outside for profile menu
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isProfileMenuOpen &&
+        profileMenuRef.current && 
+        profileButtonRef.current &&
+        !profileMenuRef.current.contains(event.target as Node) &&
+        !profileButtonRef.current.contains(event.target as Node)
+      ) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isProfileMenuOpen]);
   
   // Global search functionality
   useEffect(() => {
@@ -150,14 +174,18 @@ const DashboardLayout = () => {
   // Handle clicking outside search results to close them
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (!target.closest('#global-search') && !target.closest('#search-results')) {
+      if (
+        searchResultsRef.current && 
+        searchInputRef.current &&
+        !searchResultsRef.current.contains(e.target as Node) &&
+        !searchInputRef.current.contains(e.target as Node)
+      ) {
         setShowSearchResults(false);
       }
     };
     
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
   
   // Sidebar link component
@@ -338,7 +366,7 @@ const DashboardLayout = () => {
             
             <div className="flex justify-between flex-1 px-2 md:px-4">
               <div className="flex flex-1 md:ml-0 relative">
-                <div className="w-full max-w-lg" id="global-search">
+                <div className="w-full max-w-lg" id="global-search" ref={searchInputRef}>
                   <label htmlFor="search" className="sr-only">
                     Search
                   </label>
@@ -360,6 +388,7 @@ const DashboardLayout = () => {
                     {showSearchResults && searchResults.length > 0 && (
                       <div 
                         id="search-results"
+                        ref={searchResultsRef}
                         className="absolute z-10 mt-1 w-full max-h-96 overflow-y-auto bg-white shadow-lg rounded-md border border-gray-200 py-1"
                       >
                         <div className="px-3 py-2 border-b border-gray-100">
@@ -420,6 +449,7 @@ const DashboardLayout = () => {
                     {showSearchResults && searchQuery.trim() && searchResults.length === 0 && (
                       <div 
                         id="search-results"
+                        ref={searchResultsRef}
                         className="absolute z-10 mt-1 w-full bg-white shadow-lg rounded-md border border-gray-200 py-6 text-center"
                       >
                         <p className="text-sm text-gray-500">No results found</p>
@@ -441,6 +471,7 @@ const DashboardLayout = () => {
                   <div>
                     <button
                       type="button"
+                      ref={profileButtonRef}
                       className="flex items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-700"
                       onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
                     >
@@ -464,6 +495,7 @@ const DashboardLayout = () => {
                   <AnimatePresence>
                     {isProfileMenuOpen && (
                       <motion.div 
+                        ref={profileMenuRef}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
