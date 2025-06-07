@@ -512,7 +512,7 @@ const SchedulerAIAssistant = ({
             onClick={() => setIsExpanded(true)}
           >
             <Sparkles className="h-5 w-5" />
-            <span className="font-medium">AI Appointment Finder</span>
+            <span className="font-medium">Appointment Finder</span>
           </motion.button>
         ) : (
           <motion.div
@@ -524,7 +524,7 @@ const SchedulerAIAssistant = ({
             <div className="bg-primary-600 p-3 text-white flex items-center justify-between">
               <div className="flex items-center">
                 <Sparkles className="h-5 w-5 mr-2" />
-                <h3 className="font-medium">AI Appointment Finder</h3>
+                <h3 className="font-medium">Appointment Finder</h3>
               </div>
               <button 
                 onClick={() => setIsExpanded(false)}
