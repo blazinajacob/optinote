@@ -614,19 +614,6 @@ const SchedulerAIAssistant = ({
                       </button>
                     </div>
                   </div>
-                  
-                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    {["New patient Jane Doe tomorrow", "Follow-up for John Smith next Friday", "Emergency appointment with Dr. Johnson today"].map((suggestion, index) => (
-                      <button
-                        key={index}
-                        type="button"
-                        className="text-sm text-left px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-md text-gray-700 transition-colors"
-                        onClick={() => setInput(suggestion)}
-                      >
-                        {suggestion}
-                      </button>
-                    ))}
-                  </div>
                 </>
               ) : (
                 <div>
