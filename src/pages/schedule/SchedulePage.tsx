@@ -194,6 +194,13 @@ const SchedulePage = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  // Handle date selection from calendar
+  const handleDateSelect = (date: string) => {
+    setSelectedDate(date);
+    // Automatically switch to day view when a date is selected
+    setView('day');
+  };
+
   return (
     <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <PageHeader
@@ -257,7 +264,7 @@ const SchedulePage = () => {
                   onClick={() => setView('calendar')}
                 >
                   <CalendarDays className="h-4 w-4 mr-1.5" />
-                  Calendar
+                  Month View
                 </button>
               </div>
             </div>
@@ -294,13 +301,28 @@ const SchedulePage = () => {
                       }}
                     >
                       <CalendarDays className="h-4 w-4 mr-2" />
-                      Calendar View
+                      Month View
                     </button>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
+
+          {/* Appointment Finder - Positioned above calendar in calendar view */}
+          {view === 'calendar' && (
+            <div className="mb-6">
+              <SchedulerAIAssistant 
+                onSlotSelect={handleSlotSelect}
+                bookedSlots={appointments.map(apt => ({
+                  date: apt.date,
+                  startTime: apt.startTime,
+                  endTime: apt.endTime,
+                  doctorId: apt.doctorId
+                }))}
+              />
+            </div>
+          )}
 
           {view === 'calendar' ? (
             <motion.div
@@ -311,7 +333,7 @@ const SchedulePage = () => {
             >
               <CalendarView 
                 selectedDate={selectedDate}
-                onDateSelect={(date) => setSelectedDate(date)}
+                onDateSelect={handleDateSelect}
               />
             </motion.div>
           ) : (
@@ -507,15 +529,17 @@ const SchedulePage = () => {
         </div>
         
         <div className="hidden lg:block">
-          <SchedulerAIAssistant 
-            onSlotSelect={handleSlotSelect}
-            bookedSlots={appointments.map(apt => ({
-              date: apt.date,
-              startTime: apt.startTime,
-              endTime: apt.endTime,
-              doctorId: apt.doctorId
-            }))}
-          />
+          {view === 'day' && (
+            <SchedulerAIAssistant 
+              onSlotSelect={handleSlotSelect}
+              bookedSlots={appointments.map(apt => ({
+                date: apt.date,
+                startTime: apt.startTime,
+                endTime: apt.endTime,
+                doctorId: apt.doctorId
+              }))}
+            />
+          )}
         </div>
 
         {/* AI Assistant for mobile - shows at bottom when viewing schedule */}
@@ -720,21 +744,6 @@ const SchedulePage = () => {
               </div>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Bottom AI Assistant for mobile - shows when calendar view is active */}
-      {view === 'calendar' && (
-        <div className="lg:hidden">
-          <SchedulerAIAssistant 
-            onSlotSelect={handleSlotSelect}
-            bookedSlots={appointments.map(apt => ({
-              date: apt.date,
-              startTime: apt.startTime,
-              endTime: apt.endTime,
-              doctorId: apt.doctorId
-            }))}
-          />
         </div>
       )}
     </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Bell, 
@@ -35,9 +35,31 @@ const NotificationCenter = ({ className }: NotificationCenterProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState<NotificationCategory | 'all'>('all');
   
+  // Refs for click-outside detection
+  const notificationRef = useRef<HTMLDivElement>(null);
+  const notificationButtonRef = useRef<HTMLButtonElement>(null);
+  
   useEffect(() => {
     fetchNotifications();
   }, [fetchNotifications]);
+  
+  // Handle click outside to close notification panel
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isOpen &&
+        notificationRef.current && 
+        notificationButtonRef.current &&
+        !notificationRef.current.contains(event.target as Node) &&
+        !notificationButtonRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
   
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -99,6 +121,7 @@ const NotificationCenter = ({ className }: NotificationCenterProps) => {
     <div className={cn("relative", className)}>
       <button
         type="button"
+        ref={notificationButtonRef}
         className="relative p-1.5 text-gray-500 bg-white rounded-full hover:text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
         onClick={toggleOpen}
       >
@@ -114,6 +137,7 @@ const NotificationCenter = ({ className }: NotificationCenterProps) => {
       <AnimatePresence>
         {isOpen && (
           <motion.div 
+            ref={notificationRef}
             initial={{ opacity: 0, y: 10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}

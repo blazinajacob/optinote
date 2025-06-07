@@ -512,7 +512,7 @@ const SchedulerAIAssistant = ({
             onClick={() => setIsExpanded(true)}
           >
             <Sparkles className="h-5 w-5" />
-            <span className="font-medium">AI Appointment Finder</span>
+            <span className="font-medium">Appointment Finder</span>
           </motion.button>
         ) : (
           <motion.div
@@ -524,7 +524,7 @@ const SchedulerAIAssistant = ({
             <div className="bg-primary-600 p-3 text-white flex items-center justify-between">
               <div className="flex items-center">
                 <Sparkles className="h-5 w-5 mr-2" />
-                <h3 className="font-medium">AI Appointment Finder</h3>
+                <h3 className="font-medium">Appointment Finder</h3>
               </div>
               <button 
                 onClick={() => setIsExpanded(false)}
@@ -538,7 +538,9 @@ const SchedulerAIAssistant = ({
               {!results ? (
                 <>
                   <p className="text-sm text-gray-600 mb-4">
-                    Describe when you'd like to schedule an appointment using natural language. For example:
+                    Describe when you'd like to schedule an appointment using natural language. 
+                    <br />
+                    For Example:
                     <br />
                     <span className="italic text-gray-500">
                       "I need an appointment for John Smith next Tuesday afternoon with Dr. Johnson for a follow-up."
@@ -613,19 +615,6 @@ const SchedulerAIAssistant = ({
                         )}
                       </button>
                     </div>
-                  </div>
-                  
-                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    {["New patient Jane Doe tomorrow", "Follow-up for John Smith next Friday", "Emergency appointment with Dr. Johnson today"].map((suggestion, index) => (
-                      <button
-                        key={index}
-                        type="button"
-                        className="text-sm text-left px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-md text-gray-700 transition-colors"
-                        onClick={() => setInput(suggestion)}
-                      >
-                        {suggestion}
-                      </button>
-                    ))}
                   </div>
                 </>
               ) : (
