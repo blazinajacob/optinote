@@ -538,7 +538,9 @@ const SchedulerAIAssistant = ({
               {!results ? (
                 <>
                   <p className="text-sm text-gray-600 mb-4">
-                    Describe when you'd like to schedule an appointment using natural language. For example:
+                    Describe when you'd like to schedule an appointment using natural language. 
+                    <br />
+                    For Example:
                     <br />
                     <span className="italic text-gray-500">
                       "I need an appointment for John Smith next Tuesday afternoon with Dr. Johnson for a follow-up."
