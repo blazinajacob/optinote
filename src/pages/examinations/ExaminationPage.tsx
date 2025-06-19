@@ -713,10 +713,11 @@ const ExaminationPage = () => {
                     type="number"
                     className="input"
                     placeholder="Enter value..."
-                    value={formData.intraocularPressure?.rightEye || ''}
-                    onChange={(e) => handleNestedInputChange('intraocularPressure', 'rightEye', '', 
-                      e.target.value === '' ? undefined : Number(e.target.value)
-                    )}
+                    value={formData.intraocularPressure?.rightEye === undefined ? '' : formData.intraocularPressure.rightEye}
+                    onChange={(e) => {
+                      const value = e.target.value === '' ? undefined : Number(e.target.value);
+                      handleNestedInputChange('intraocularPressure', 'rightEye', '', value);
+                    }}
                   />
                 </div>
               </div>
@@ -730,10 +731,11 @@ const ExaminationPage = () => {
                     type="number"
                     className="input"
                     placeholder="Enter value..."
-                    value={formData.intraocularPressure?.leftEye || ''}
-                    onChange={(e) => handleNestedInputChange('intraocularPressure', 'leftEye', '', 
-                      e.target.value === '' ? undefined : Number(e.target.value)
-                    )}
+                    value={formData.intraocularPressure?.leftEye === undefined ? '' : formData.intraocularPressure.leftEye}
+                    onChange={(e) => {
+                      const value = e.target.value === '' ? undefined : Number(e.target.value);
+                      handleNestedInputChange('intraocularPressure', 'leftEye', '', value);
+                    }}
                   />
                 </div>
               </div>
