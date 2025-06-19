@@ -35,7 +35,7 @@ const PatientDetailsPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [showAIAssistant, setShowAIAssistant] = useState(false);
   const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([]);
-  const [activeBillingTab, setActiveBillingTab] = useState<'overview' | 'insurance' | 'self-pay' | 'history'>('overview');
+  const [activeBillingTab, setActiveBillingTab] = useState<'overview' | 'insurance' | 'self-pay' | 'history' | 'eligibility'>('overview');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   useEffect(() => {
@@ -216,7 +216,7 @@ const PatientDetailsPage = () => {
         )}
       </div>
       
-      {/* Mobile Tab Menu - shows only on mobile */}
+      {/* Mobile menu overlay */}
       <div className="relative sm:hidden mb-4">
         <button 
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -951,6 +951,16 @@ const PatientDetailsPage = () => {
                   </button>
                   <button
                     className={`pb-2 border-b-2 font-medium text-sm ${
+                      activeBillingTab === 'eligibility'
+                        ? 'border-primary-500 text-primary-600'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    }`}
+                    onClick={() => setActiveBillingTab('eligibility')}
+                  >
+                    Eligibility
+                  </button>
+                  <button
+                    className={`pb-2 border-b-2 font-medium text-sm ${
                       activeBillingTab === 'self-pay'
                         ? 'border-primary-500 text-primary-600'
                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -984,6 +994,265 @@ const PatientDetailsPage = () => {
                 onSave={handleSaveInsurance}
                 onCancel={() => setActiveBillingTab('overview')}
               />
+            )}
+            
+            {activeBillingTab === 'eligibility' && (
+              <div className="bg-white shadow-sm rounded-lg overflow-hidden">
+                <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">Insurance Eligibility</h3>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Check and verify patient's insurance eligibility and benefits
+                  </p>
+                </div>
+                
+                <div className="p-4">
+                  <div className="bg-primary-50 border border-primary-100 rounded-lg p-4 mb-6">
+                    <div className="flex items-start">
+                      <div className="flex-shrink-0">
+                        <CheckCircle className="h-5 w-5 text-primary-500" />
+                      </div>
+                      <div className="ml-3">
+                        <h3 className="text-sm font-medium text-primary-800">Eligibility Status</h3>
+                        <p className="mt-1 text-sm text-primary-700">
+                          This patient's insurance has been verified and is currently active. Last verified on June 1, 2024.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-6">
+                    <div className="border rounded-lg overflow-hidden">
+                      <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                        <div className="flex justify-between items-center">
+                          <h4 className="text-sm font-medium text-gray-900">Blue Cross Blue Shield</h4>
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-800">
+                            <CheckCircle className="mr-1 h-3 w-3" />
+                            Active
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-500">Policy #BC987654321 • Group #GRP12345</p>
+                      </div>
+                      
+                      <div className="p-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <p className="text-xs text-gray-500">Coverage Period</p>
+                            <p className="text-sm font-medium">01/01/2024 - 12/31/2024</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500">Network Status</p>
+                            <p className="text-sm font-medium flex items-center">
+                              <CheckCircle className="h-3 w-3 mr-1 text-success-500" />
+                              In-Network
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500">Plan Type</p>
+                            <p className="text-sm font-medium">PPO</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500">Verification Date</p>
+                            <p className="text-sm font-medium">06/01/2024</p>
+                          </div>
+                        </div>
+                        
+                        <div className="border-t border-gray-200 pt-4 mt-4">
+                          <h5 className="text-sm font-medium text-gray-900 mb-3">Deductible Information</h5>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                              <p className="text-xs text-gray-500">Individual Deductible</p>
+                              <div className="flex justify-between items-center mt-1">
+                                <p className="text-sm font-medium">$1,500.00</p>
+                                <p className="text-xs text-gray-500">$500.00 met</p>
+                              </div>
+                              <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                                <div className="bg-primary-500 h-2 rounded-full" style={{ width: '33%' }}></div>
+                              </div>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-500">Family Deductible</p>
+                              <div className="flex justify-between items-center mt-1">
+                                <p className="text-sm font-medium">$3,000.00</p>
+                                <p className="text-xs text-gray-500">$1,200.00 met</p>
+                              </div>
+                              <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                                <div className="bg-primary-500 h-2 rounded-full" style={{ width: '40%' }}></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="border-t border-gray-200 pt-4 mt-4">
+                          <h5 className="text-sm font-medium text-gray-900 mb-3">Vision Benefits</h5>
+                          <div className="overflow-x-auto">
+                            <table className="min-w-full divide-y divide-gray-200">
+                              <thead className="bg-gray-50">
+                                <tr>
+                                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
+                                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Coverage</th>
+                                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient Cost</th>
+                                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Frequency</th>
+                                </tr>
+                              </thead>
+                              <tbody className="bg-white divide-y divide-gray-200">
+                                <tr>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">Eye Exam</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">
+                                    <CheckCircle className="h-4 w-4 text-success-500" />
+                                  </td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">$20 copay</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">Once every 12 months</td>
+                                </tr>
+                                <tr>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">Frames</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">
+                                    <CheckCircle className="h-4 w-4 text-success-500" />
+                                  </td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">20% coinsurance</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">Once every 24 months</td>
+                                </tr>
+                                <tr>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">Lenses</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">
+                                    <CheckCircle className="h-4 w-4 text-success-500" />
+                                  </td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">$25 copay</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">Once every 12 months</td>
+                                </tr>
+                                <tr>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">Contact Lenses</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">
+                                    <CheckCircle className="h-4 w-4 text-success-500" />
+                                  </td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">20% coinsurance</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">In lieu of glasses</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        
+                        <div className="border-t border-gray-200 pt-4 mt-4">
+                          <h5 className="text-sm font-medium text-gray-900 mb-3">Medical Benefits</h5>
+                          <div className="overflow-x-auto">
+                            <table className="min-w-full divide-y divide-gray-200">
+                              <thead className="bg-gray-50">
+                                <tr>
+                                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
+                                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Coverage</th>
+                                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient Cost</th>
+                                </tr>
+                              </thead>
+                              <tbody className="bg-white divide-y divide-gray-200">
+                                <tr>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">Medical Eye Exam</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">
+                                    <CheckCircle className="h-4 w-4 text-success-500" />
+                                  </td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">$20 copay</td>
+                                </tr>
+                                <tr>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">Diagnostic Testing</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">
+                                    <CheckCircle className="h-4 w-4 text-success-500" />
+                                  </td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">20% coinsurance</td>
+                                </tr>
+                                <tr>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">Treatment of Eye Disease</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">
+                                    <CheckCircle className="h-4 w-4 text-success-500" />
+                                  </td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">20% coinsurance</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="border rounded-lg overflow-hidden">
+                      <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                        <div className="flex justify-between items-center">
+                          <h4 className="text-sm font-medium text-gray-900">VSP Vision Care</h4>
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-800">
+                            <CheckCircle className="mr-1 h-3 w-3" />
+                            Active
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-500">Policy #VSP123456789 • Group #VSPGRP789</p>
+                      </div>
+                      
+                      <div className="p-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <p className="text-xs text-gray-500">Coverage Period</p>
+                            <p className="text-sm font-medium">01/01/2024 - 12/31/2024</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500">Network Status</p>
+                            <p className="text-sm font-medium flex items-center">
+                              <CheckCircle className="h-3 w-3 mr-1 text-success-500" />
+                              In-Network
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500">Plan Type</p>
+                            <p className="text-sm font-medium">Vision</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500">Verification Date</p>
+                            <p className="text-sm font-medium">05/15/2024</p>
+                          </div>
+                        </div>
+                        
+                        <div className="border-t border-gray-200 pt-4 mt-4">
+                          <h5 className="text-sm font-medium text-gray-900 mb-3">Vision Benefits</h5>
+                          <div className="overflow-x-auto">
+                            <table className="min-w-full divide-y divide-gray-200">
+                              <thead className="bg-gray-50">
+                                <tr>
+                                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
+                                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Coverage</th>
+                                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient Cost</th>
+                                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Frequency</th>
+                                </tr>
+                              </thead>
+                              <tbody className="bg-white divide-y divide-gray-200">
+                                <tr>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">Eye Exam</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">
+                                    <CheckCircle className="h-4 w-4 text-success-500" />
+                                  </td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">$10 copay</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">Once every 12 months</td>
+                                </tr>
+                                <tr>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">Frames</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">
+                                    <CheckCircle className="h-4 w-4 text-success-500" />
+                                  </td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">$150 allowance</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">Once every 24 months</td>
+                                </tr>
+                                <tr>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">Lenses</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">
+                                    <CheckCircle className="h-4 w-4 text-success-500" />
+                                  </td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">$25 copay</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">Once every 12 months</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
             
             {activeBillingTab === 'self-pay' && (
