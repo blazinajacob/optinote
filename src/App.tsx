@@ -5,6 +5,7 @@ import { useAuthStore } from './stores/authStore';
 // Components
 import OfflineAlert from './components/ui/OfflineAlert';
 import InstallPWAButton from './components/ui/InstallPWAButton';
+import BoltBadge from './components/ui/BoltBadge';
 
 // Layouts
 import AuthLayout from './layouts/AuthLayout';
@@ -55,6 +56,7 @@ function App() {
     <>
       <OfflineAlert />
       <InstallPWAButton />
+      <BoltBadge />
       
       <Routes>
         {/* Auth routes */}
